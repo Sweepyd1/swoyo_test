@@ -1,3 +1,6 @@
-address="http://localhost:1410" 
-username="test"
-password="test"
+[server]
+url = "http://localhost:4010/send_sms"
+
+[auth]
+username = "test"
+password = "test"

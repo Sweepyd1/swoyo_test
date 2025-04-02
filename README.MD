@@ -2,7 +2,7 @@ sudo npm install -g redoc-cli
 
 redoc-cli serve sms-platform.yaml
 
- ./prism-cli-linux mock sms-platform.yaml
+./prism-cli-linux mock sms-platform.yaml
 
  curl -X POST http://localhost:4010/send_sms \
           -u "test:test" \

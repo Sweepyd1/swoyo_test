@@ -1,10 +1,15 @@
 class HTTPRequest:
-    def __init__():
-        pass 
+    def __init__(self, method, path, headers, body):
+        self.method = method
+        self.path = path
+        self.headers = headers
+        self.body = body
+
+    def to_bytes(self):
+        headers = self.headers.copy()
+        headers["Content-Length"] = str(len(self.body))
+        headers_str = "\r\n".join([f"{k}: {v}" for k, v in headers.items()])
+        request_line = f"{self.method} {self.path} HTTP/1.1\r\n"
+        return f"{request_line}{headers_str}\r\n\r\n".encode() + self.body
 
 
-    async def to_bytes() -> bytes:
-        pass 
-
-    async def from_bytes(binary_data:bytes):
-        pass 
