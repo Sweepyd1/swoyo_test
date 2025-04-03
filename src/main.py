@@ -70,6 +70,7 @@ def main() -> None:
     port = url.port or 80
     path = url.path
     
+    
     headers = {
         "Host": f"{host}:{port}" if port != 80 else host,
         "Content-Type": "application/json",

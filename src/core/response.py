@@ -1,8 +1,7 @@
-from typing import Self
-
+from typing import Self, Dict
 
 class HTTPResponse:
-    def __init__(self, status, headers, body):
+    def __init__(self, status:int, headers:Dict[str, str], body:str):
         self.status = status
         self.headers = headers
         self.body = body

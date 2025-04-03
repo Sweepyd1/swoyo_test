@@ -1,5 +1,6 @@
+from typing import Dict
 class HTTPRequest:
-    def __init__(self, method, path, headers, body):
+    def __init__(self, method:str, path:str, headers:Dict[str, str], body:bytes):
         self.method = method
         self.path = path
         self.headers = headers
