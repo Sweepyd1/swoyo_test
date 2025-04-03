@@ -4,19 +4,15 @@
 
 ## 🚀 Быстрый старт
 
-### Предварительные требования
-- Python 3.11+
-- [UV](https://github.com/astral-sh/uv)
-
-### Установка и запуск
 ```bash
 # 1. Клонировать репозиторий
+pip install uv
 git clone https://github.com/Sweepyd1/swoyo_test
 cd swoyo_test
 
 # 2. Установить зависимости
 uv sync
-
+source .venv/bin/activate.fish
 # 3. Запустить mock-сервер (в отдельном терминале)
 ./prism-cli-linux mock sms-platform.yaml
 
