@@ -1,9 +1,9 @@
 import pytest
-from src.utils.request import HTTPRequest
-from src.utils.response import HTTPResponse
+from src.core.request import HTTPRequest
+from src.core.response import HTTPResponse
 
 class TestHTTPRequest:
-    def test_to_bytes(self):
+    def test_to_bytes(self) -> None:
         request = HTTPRequest(
             method="POST",
             path="/api/send",
@@ -26,7 +26,7 @@ class TestHTTPResponse:
         )
         return HTTPResponse.from_bytes(data)
 
-    def test_from_bytes(self, sample_response):
+    def test_from_bytes(self, sample_response) -> None:
         assert sample_response.status == 200
         assert sample_response.headers["Content-Type"] == "application/json"
         assert sample_response.body == '{"status": "success"}'

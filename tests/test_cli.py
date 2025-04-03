@@ -2,7 +2,7 @@ from src.main import parse_args
 import pytest
 from unittest.mock import patch
 
-def test_parse_args():
+def test_parse_args() -> None:
     test_args = [
         "--sender", "123",
         "--receiver", "456",

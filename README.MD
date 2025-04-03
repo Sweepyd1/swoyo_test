@@ -1,11 +1,27 @@
-sudo npm install -g redoc-cli
+# ✨ Тестовое задание для Python стажёра
 
-redoc-cli serve sms-platform.yaml
+**Клиент для сервиса отправки SMS** с поддержкой OpenAPI-спецификации и логированием операций.
 
+## 🚀 Быстрый старт
+
+### Предварительные требования
+- Python 3.11+
+- [UV](https://github.com/astral-sh/uv)
+
+### Установка и запуск
+```bash
+# 1. Клонировать репозиторий
+git clone https://github.com/Sweepyd1/swoyo_test
+cd swoyo_test
+
+# 2. Установить зависимости
+uv sync
+
+# 3. Запустить mock-сервер (в отдельном терминале)
 ./prism-cli-linux mock sms-platform.yaml
 
- curl -X POST http://localhost:4010/send_sms \
-          -u "test:test" \
-          -H "Content-Type: application/json" \
-          -d '{"sender": "test", "recipient": "89101335645", "message": "Hello"}'
-{"status":"success","message_id":"123456"}
+# 4. Запустить клиент
+uv run src/main.py \
+  --sender 1234567890 \
+  --receiver 0987654321 \
+  --text "Hello World"

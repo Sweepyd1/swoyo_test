@@ -1,3 +1,6 @@
+from typing import Self
+
+
 class HTTPResponse:
     def __init__(self, status, headers, body):
         self.status = status
@@ -5,7 +8,7 @@ class HTTPResponse:
         self.body = body
 
     @classmethod
-    def from_bytes(cls, data):
+    async def from_bytes(cls, data:bytes) -> Self:
         try:
             headers_part, body = data.split(b"\r\n\r\n", 1)
         except ValueError:

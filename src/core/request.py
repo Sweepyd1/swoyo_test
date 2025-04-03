@@ -5,7 +5,7 @@ class HTTPRequest:
         self.headers = headers
         self.body = body
 
-    def to_bytes(self):
+    async def to_bytes(self) -> bytes:
         headers = self.headers.copy()
         headers["Content-Length"] = str(len(self.body))
         headers_str = "\r\n".join([f"{k}: {v}" for k, v in headers.items()])

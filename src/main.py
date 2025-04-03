@@ -5,35 +5,61 @@ import socket
 from urllib.parse import urlparse
 import tomli
 import sys
-from utils.request import HTTPRequest
-from utils.response import HTTPResponse
+from core.request import HTTPRequest
+from core.response import HTTPResponse
+import asyncio
+import logging
+
+def setup_logging():
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler('sms_client.log'),
+            logging.StreamHandler()
+        ]
+    )
+    return logging.getLogger(__name__)
 
 
-def load_config(config_path):
-    with open(config_path, "rb") as f:
-        config = tomli.load(f)
-    return {
-        "server_url": config["server"]["url"],
-        "username": config["auth"]["username"],
-        "password": config["auth"]["password"],
-    }
 
-def parse_args():
+def load_config(config_path: str, logger:logging.Logger) -> dict:
+    try:
+        with open(config_path, "rb") as f:
+            config = tomli.load(f)
+        logger.info(f"Config loaded from {config_path}")
+        return {
+            "server_url": config["server"]["url"],
+            "username": config["auth"]["username"],
+            "password": config["auth"]["password"],
+        }
+    except Exception as e:
+        logger.error(f"Error loading config: {str(e)}")
+        raise
+
+def parse_args(logger: logging.Logger) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Send SMS via CLI")
     parser.add_argument("--sender", required=True, help="Sender's phone number")
     parser.add_argument("--receiver", required=True, help="Recipient's phone number")
     parser.add_argument("--text", required=True, help="Message text")
-    return parser.parse_args()
+    args = parser.parse_args()
+    
+    logger.info(f"CLI arguments parsed: sender={args.sender}, "
+                f"receiver={args.receiver}, text_length={len(args.text)}")
+    return args
 
-def main():
-    args = parse_args()
-    config = load_config("config.toml")
+async def main() -> None:
+    logger = setup_logging()
+    logger.info("Starting SMS client")
+    args = parse_args(logger)
+    config = load_config("config.toml", logger)
     
     body_data = {
         "sender": args.sender,
         "recipient": args.receiver,
         "message": args.text
     }
+    logger.debug(f"Request body: {body_data}")
     body_json = json.dumps(body_data).encode("utf-8")
     
  
@@ -51,13 +77,12 @@ def main():
         "Authorization": f"Basic {auth_header}"
     }
     
-
     request = HTTPRequest("POST", path, headers, body_json)
-    
+    logger.info(f"Sending request to {config['server_url']}")
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((host, port))
-            s.sendall(request.to_bytes())
+            s.sendall(await request.to_bytes())
             
             response_data = b""
             while True:
@@ -66,13 +91,17 @@ def main():
                     break
                 response_data += chunk
             
-            response = HTTPResponse.from_bytes(response_data)
+            response = await HTTPResponse.from_bytes(response_data)
+            logger.info(f"Received response: {response.status}")
+            logger.debug(f"Response body: {response.body}")
+
             print(f"Code: {response.status}")
             print(f"Body: {response.body}")
     
     except Exception as e:
+        logger.error(f"Critical error: {str(e)}", exc_info=True)
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
