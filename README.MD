@@ -14,14 +14,16 @@ pip install uv
 uv sync
 source .venv/bin/activate.fish
 
-# 3. Запустить mock-сервер (в отдельном терминале)
+# 3. Создать файл config.toml на основе example_config.toml с вашими данными
+
+# 4. Запустить mock-сервер (в отдельном терминале)
 ./prism-cli-linux mock sms-platform.yaml
 
-# 4. Запустить клиент
+# 5. Запустить клиент
 uv run src/main.py \
   --sender 1234567890 \
   --receiver 0987654321 \
   --text "Hello World"
 
-# 5. Запустить тесты
+# 6. Запустить тесты
 pytest tests/ -v

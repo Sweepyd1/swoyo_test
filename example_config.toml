@@ -1,0 +1,6 @@
+[server]
+url = "you_url"
+
+[auth]
+username = "you_username"
+password = "you_password"
