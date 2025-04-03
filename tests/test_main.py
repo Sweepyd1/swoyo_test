@@ -18,6 +18,7 @@ def mock_socket():
         mock_socket.return_value.__enter__.return_value = mock_instance
         yield mock_instance
 
+
 def test_main_success(mock_socket, capsys):
     with patch("src.main.load_config") as mock_load:
         mock_load.return_value = {

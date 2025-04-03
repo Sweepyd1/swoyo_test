@@ -3,3 +3,8 @@
 2025-04-03 23:24:12,307 - INFO - Config loaded from config.toml
 2025-04-03 23:24:12,307 - INFO - Sending request to http://localhost:4010/send_sms
 2025-04-03 23:24:17,314 - INFO - Received response: 200
+2025-04-04 00:08:03,777 - INFO - Starting SMS client
+2025-04-04 00:08:03,781 - INFO - CLI arguments parsed: sender=1234567890, receiver=0987654321, text_length=11
+2025-04-04 00:08:03,781 - INFO - Config loaded from config.toml
+2025-04-04 00:08:03,781 - INFO - Sending request to http://localhost:4010/send_sms
+2025-04-04 00:08:08,786 - INFO - Received response: 200

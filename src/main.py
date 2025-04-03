@@ -7,7 +7,6 @@ import tomli
 import sys
 from core.request import HTTPRequest
 from core.response import HTTPResponse
-import asyncio
 import logging
 
 def setup_logging():
@@ -21,9 +20,9 @@ def setup_logging():
     )
     return logging.getLogger(__name__)
 
+logger = setup_logging()
 
-
-def load_config(config_path: str, logger:logging.Logger) -> dict:
+def load_config(config_path: str) -> dict:
     try:
         with open(config_path, "rb") as f:
             config = tomli.load(f)
@@ -37,7 +36,7 @@ def load_config(config_path: str, logger:logging.Logger) -> dict:
         logger.error(f"Error loading config: {str(e)}")
         raise
 
-def parse_args(logger: logging.Logger) -> argparse.Namespace:
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Send SMS via CLI")
     parser.add_argument("--sender", required=True, help="Sender's phone number")
     parser.add_argument("--receiver", required=True, help="Recipient's phone number")
@@ -48,11 +47,11 @@ def parse_args(logger: logging.Logger) -> argparse.Namespace:
                 f"receiver={args.receiver}, text_length={len(args.text)}")
     return args
 
-async def main() -> None:
-    logger = setup_logging()
+def main() -> None:
+   
     logger.info("Starting SMS client")
-    args = parse_args(logger)
-    config = load_config("config.toml", logger)
+    args = parse_args()
+    config = load_config("config.toml")
     
     body_data = {
         "sender": args.sender,
@@ -82,7 +81,7 @@ async def main() -> None:
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((host, port))
-            s.sendall(await request.to_bytes())
+            s.sendall(request.to_bytes())
             
             response_data = b""
             while True:
@@ -91,7 +90,7 @@ async def main() -> None:
                     break
                 response_data += chunk
             
-            response = await HTTPResponse.from_bytes(response_data)
+            response = HTTPResponse.from_bytes(response_data)
             logger.info(f"Received response: {response.status}")
             logger.debug(f"Response body: {response.body}")
 
@@ -104,4 +103,4 @@ async def main() -> None:
         sys.exit(1)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

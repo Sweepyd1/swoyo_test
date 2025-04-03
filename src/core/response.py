@@ -8,7 +8,7 @@ class HTTPResponse:
         self.body = body
 
     @classmethod
-    async def from_bytes(cls, data:bytes) -> Self:
+    def from_bytes(cls, data:bytes) -> Self:
         try:
             headers_part, body = data.split(b"\r\n\r\n", 1)
         except ValueError:

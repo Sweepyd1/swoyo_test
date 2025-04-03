@@ -25,7 +25,7 @@ class TestHTTPResponse:
             b'{"status": "success"}'
         )
         return HTTPResponse.from_bytes(data)
-
+ 
     def test_from_bytes(self, sample_response) -> None:
         assert sample_response.status == 200
         assert sample_response.headers["Content-Type"] == "application/json"
