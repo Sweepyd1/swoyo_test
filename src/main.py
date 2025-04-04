@@ -58,6 +58,11 @@ def main() -> None:
         "recipient": args.receiver,
         "message": args.text
     }
+
+    if len(body_data["sender"]) != 11 or len(body_data["recipient"]) != 11:
+        logger.error(f"Critical error: номер должен состоять из 11 цифр", exc_info=True)
+        return 
+
     logger.debug(f"Request body: {body_data}")
     body_json = json.dumps(body_data).encode("utf-8")
     

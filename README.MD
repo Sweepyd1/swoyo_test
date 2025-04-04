@@ -21,8 +21,8 @@ source .venv/bin/activate.fish
 
 # 5. Запустить клиент
 uv run src/main.py \
-  --sender 1234567890 \
-  --receiver 0987654321 \
+  --sender 12345678901 \
+  --receiver 09876543210 \
   --text "Hello World"
 
 # 6. Запустить тесты
