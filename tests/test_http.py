@@ -6,12 +6,12 @@ class TestHTTPRequest:
     def test_to_bytes(self) -> None:
         request = HTTPRequest(
             method="POST",
-            path="/api/send",
+            path="/send_sms",
             headers={"Content-Type": "application/json"},
             body=b'{"test": true}'
         )
         result = request.to_bytes()
-        assert b"POST /api/send HTTP/1.1" in result
+        assert b"POST /send_sms HTTP/1.1" in result
         assert b"Content-Type: application/json" in result
         assert b'{"test": true}' in result
 

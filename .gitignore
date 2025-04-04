@@ -23,7 +23,7 @@ ENV/
 pythonenv*
 
 config.toml
-
+sms_client.log
 
 # ==============================
 # UV Specific

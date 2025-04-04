@@ -22,15 +22,15 @@ def mock_socket():
 def test_main_success(mock_socket, capsys):
     with patch("src.main.load_config") as mock_load:
         mock_load.return_value = {
-            "server_url": "http://test.com/api/send",
+            "server_url": "http://localhost:4010/send_sms",
             "username": "user",
             "password": "pass"
         }
         
         with patch("sys.argv", [
             "main.py",
-            "--sender", "123",
-            "--receiver", "456",
+            "--sender", "12345678901",
+            "--receiver", "09876543210",
             "--text", "Test"
         ]):
             main()
@@ -44,7 +44,7 @@ def test_main_success(mock_socket, capsys):
     request_body = sent_data.decode().split("\r\n\r\n")[1]
     print("\nТело запроса:", request_body)  
     
-    assert b"POST /api/send HTTP/1.1" in sent_data
-    assert b'"sender": "123"' in sent_data
-    assert b'"recipient": "456"' in sent_data  
+    assert b"POST /send_sms HTTP/1.1" in sent_data
+    assert b'"sender": "12345678901"' in sent_data
+    assert b'"recipient": "09876543210"' in sent_data  
     assert b'"message": "Test"' in sent_data
